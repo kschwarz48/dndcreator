@@ -3,8 +3,10 @@ import random
 # Description: D&D algorithm
 
 class Character:
-
     def __init__(self):
+        """
+        Default Constructor for Character
+        """
         self.race = "" 
         self.player_name = ""
         self.character_name = ""
@@ -16,12 +18,15 @@ class Character:
         self.health_points = 0
         self.equipment = [""]
         self.armor_class = 0
-        self.Attributes = {
-        "Strength": 0, "Dexterity": 0, "Constitution": 0,
-        "Wisdom": 0, "Charisma": 0, "Intelligence": 0
-        }
+        self.Attributes = { "Strength": 0, "Dexterity": 0, "Constitution": 0, "Wisdom": 0, "Charisma": 0, "Intelligence": 0 }
         self.cantrips = {"No Cantrips"}
         self.spells = {"No Spells"}
+        self.wizard_cantrips = ["mage hand", "mage armor", "ray of frost", "fire bolt", "light"]
+        self.bard_cantrips = ["mage hand", "minor illusion", "prestidigitation", "thaumaturgy", "vicious mockery"]
+        self.cleric_cantrips = ["mage hand", "mending", "acid splash", "guidance", "light"]
+        self.wizard_spells = ["burning hands", "charm person", "detect magic", "feather fall", "fireball"]
+        self.bard_spells = ["thunder wave", "sleep", "silent image", "shield", "identify"]
+        self.cleric_spells = ["bless", "cure wounds", "divine favor", "guiding bolt", "healing word"]
         self.stat_rolls = list(random.sample(range(3, 18), 6))
 
     def roll_stats(self):
@@ -30,7 +35,6 @@ class Character:
         """
         print("---STAT ASSIGNMENT---")
         print("Rolling for stats...\nYour stats are: ",  self.stat_rolls)
-        
         for key in self.Attributes:
             if self.Attributes[key] != 0:
                 continue
@@ -50,14 +54,14 @@ class Character:
         
     def set_character_name(self):
         """
-        Sets character name based on input
+        Sets user-generated character name
         """
         self.character_name = input("\nPlease enter the character's name: ")
         self.set_player_name()
         
     def set_player_name(self):
         """
-        Sets player name based on input
+        Sets user-generated player name
         """
         self.player_name = input("\nPlease enter the player's name: ")
         self.set_race()
@@ -125,8 +129,7 @@ class Character:
 
     def set_class(self):
         """
-        Receives input for character class
-        Sets player class
+        Sets player class based on user choice
         """
         print("\nSelect a class from the following list for your character:\n")
         print("---Fighter---\n" +
@@ -158,36 +161,30 @@ class Character:
             print("\nFighter is a great choice! Get ready to defend your name!\n")
             self.roll_stats()
             print("Rolling health points...  health points rolled.")
-            #cantrip/spell method call(0,0)
-            #we can change this method call
             
         elif class_input.lower() == "wizard":
             self.player_class = "Wizard"
             print("\nWizard is a great choice! Lets see those wizard skills at work!\n")
             self.roll_stats()
             print("Rolling health points...  health points rolled.")
-            #cantrip/spell method call(3,2)
             
         elif class_input.lower() == "cleric":
             self.player_class = "Cleric"
             print("\nCleric is a great choice, but how clerical can you be?\n")
             self.roll_stats()
             print("Rolling health points...  health points rolled.")
-            #cantrip/spell method call(3,2)
             
         elif class_input.lower() == "bard":
             self.player_class = "Bard"
             print("\nBard is a great choice! Show eveyrone who's best!\n")
             self.roll_stats()
             print("Rolling health points...  health points rolled.")
-            #cantrip/spell method call(2,2)
             
         elif class_input.lower() == "rogue":
             self.player_class = "Rogue"
             print("\nRogue is a great choice! Lets see those rogue skills at work!\n")
             self.roll_stats()
             print("Rolling health points...  health points rolled.")
-            #cantrip/spell method call(0,0)
             
         else:
             print("Invalid")
@@ -195,78 +192,170 @@ class Character:
             
     def set_abilities(self):
         """
-        Sets player abilities
+        Player Chooses Cantrips and Spells based on their chosen Class
         """
         
         print("\nSelect abilities for your character:\n")
-        
-
+    
+        # Wizard Cantrips and Spells
         if self.player_class == "Wizard":
+            #Wizard Cantrips
             print("     Cantrips (pick 3)\nMage Hand\nMage Armor\nRay of Frost\nFire Bolt\nLight\n")      
-            
-
             cantrip_1 = input("Enter your first cantrip selection: ")
+            if cantrip_1.lower() not in self.wizard_cantrips:
+                print("Invalid Entry")
+                self.wizard_cantrips = ["mage hand", "mage armor", "ray of frost", "fire bolt", "light"]
+                self.set_abilities()
+                return
+            self.wizard_cantrips.remove(cantrip_1.lower())
             cantrip_2 = input("Enter your second cantrip selection: ")
+            if cantrip_2 not in self.wizard_cantrips:
+                print("Invalid Entry")
+                self.wizard_cantrips = ["mage hand", "mage armor", "ray of frost", "fire bolt", "light"]
+                self.set_abilities()
+                return
+            self.wizard_cantrips.remove(cantrip_2.lower())
             cantrip_3 = input("Enter your third cantrip selection: ")
+            if cantrip_3 not in self.wizard_cantrips:
+                print("Invalid Entry")
+                self.wizard_cantrips = ["mage hand", "mage armor", "ray of frost", "fire bolt", "light"]
+                self.set_abilities()
+                return
+            self.wizard_cantrips.remove(cantrip_3.lower())
 
+            # Wizard Spells
             print("     Level 1 Spells (pick 2)\nBurning Hands\nCharm Person\nDetect Magic\nFeather Fall\nFireball")
-            
             spell_1 = input("Enter your first spell: ")
+            if spell_1 not in self.wizard_spells:
+                print("Invalid Entry or Spell Already Chosen")
+                self.wizard_spells = ["burning hands", "charm person", "detect magic", "feather fall", "fireball"]
+                self.wizard_cantrips = ["mage hand", "mage armor", "ray of frost", "fire bolt", "light"]
+                self.set_abilities()
+                return
+            self.wizard_spells.remove(spell_1.lower())
             spell_2 = input("Enter your second spell: ")
+            if spell_2 not in self.wizard_spells:
+                print("Invalid Entry or Spell Already Chosen")
+                self.wizard_spells = ["burning hands", "charm person", "detect magic", "feather fall", "fireball"]
+                self.wizard_cantrips = ["mage hand", "mage armor", "ray of frost", "fire bolt", "light"]
+                self.set_abilities()
+                return
+            self.wizard_spells.remove(spell_2.lower())
             
+            # Creating print for wizard spells/cantrips
             cantrips = {
             "Cantrip 1": cantrip_1, "Cantrip 2": cantrip_2, "Cantrip 3": cantrip_3
-            }
-                
+            }    
             spells = {
             "Spell 1": spell_1,"Spell 2": spell_2
             }
 
-
-
+        # Cleric Cantrips and Spells
         elif self.player_class == "Cleric":
-            print("     Cantrips (pick 3)\nMage Hand\nMending\nAcid Splash\nGuidance\nLighor\nGuiding Bolt\nHealing Word\n")
-                 
+            
+            # Cleric Cantrips
+            print("     Cantrips (pick 3)\nMage Hand\nMending\nAcid Splash\nGuidance\nLight") 
             cantrip_1 = input("Enter your first cantrip selection: ")
+            if cantrip_1.lower() not in self.cleric_cantrips:
+                print("Invalid Entry")
+                self.cleric_cantrips = ["mage hand", "mending", "acid splash", "guidance", "light"]
+                self.set_abilities()
+                return
+            self.cleric_cantrips.remove(cantrip_1.lower())
             cantrip_2 = input("Enter your second cantrip selection: ")
+            if cantrip_2.lower() not in self.cleric_cantrips:
+                print("Invalid Entry")
+                self.cleric_cantrips = ["mage hand", "mending", "acid splash", "guidance", "light"]
+                self.set_abilities()
+                return
+            self.cleric_cantrips.remove(cantrip_2.lower())
             cantrip_3 = input("Enter your third cantrip selection: ")
+            if cantrip_3.lower() not in self.cleric_cantrips:
+                print("Invalid Entry")
+                self.cleric_cantrips = ["mage hand", "mending", "acid splash", "guidance", "light"]
+                self.set_abilities()
+                return
+            self.cleric_cantrips.remove(cantrip_3.lower())
 
+            # Cleric Spells
             print("     Level 1 Spells (pick 2)\nBless\nCure Wounds\nDivine Favor\nGuiding Bolt\nHealing Word")
             spell_1 = input("Enter your first spell: ")
+            if spell_1 not in self.cleric_spells:
+                print("Invalid Entry or Spell Already Chosen")
+                self.cleric_spells = ["bless", "cure wounds", "divine favor", "guiding bolt", "healing word"]
+                self.cleric_cantrips = ["mage hand", "mending", "acid splash", "guidance", "light"]
+                self.set_abilities()
+                return
+            self.cleric_spells.remove(spell_1.lower())
             spell_2 = input("Enter your second spell: ")
+            if spell_2 not in self.cleric_spells:
+                print("Invalid Entry or Spell Already Chosen")
+                self.cleric_spells = ["bless", "cure wounds", "divine favor", "guiding bolt", "healing word"]
+                self.cleric_cantrips = ["mage hand", "mending", "acid splash", "guidance", "light"]
+                self.set_abilities()
+                return
+            self.cleric_spells.remove(spell_2.lower())
 
+            # Creating print for cleric spells/cantrips
             cantrips = {
             "Cantrip 1": cantrip_1, "Cantrip 2": cantrip_2, "Cantrip 3": cantrip_3
-            }
-                
+            }  
             spells = {
             "Spell 1": spell_1,"Spell 2": spell_2
             }
-            
-        elif self.player_class == "Bard":
-            print("     Cantrips (pick 2)\nMage Hand\nMinor Illusion\nPrestidigitation\nThaumaturgy\nVicious Mockery\n")
-            
-            cantrip_1 = input("Enter your first cantrip selection: ")
-            cantrip_2 = input("Enter your second cantrip selection: ")
 
+        # Bard Cantrips and Spells    
+        elif self.player_class == "Bard":
+            
+            # Bard Cantrips
+            print("     Cantrips (pick 2)\nMage Hand\nMinor Illusion\nPrestidigitation\nThaumaturgy\nVicious Mockery\n")
+            cantrip_1 = input("Enter your first cantrip selection: ")
+            if cantrip_1.lower() not in self.bard_cantrips:
+                print("Invalid Entry")
+                self.bard_cantrips = ["mage hand", "minor illusion", "prestidigitation", "thaumaturgy", "vicious mockery"]
+                self.set_abilities()
+                return
+            self.bard_cantrips.remove(cantrip_1.lower())
+            cantrip_2 = input("Enter your second cantrip selection: ")
+            if cantrip_2.lower() not in self.bard_cantrips:
+                print("Invalid Entry")
+                self.bard_cantrips = ["mage hand", "minor illusion", "prestidigitation", "thaumaturgy", "vicious mockery"]
+                self.set_abilities()
+                return
+            self.bard_cantrips.remove(cantrip_2.lower())
+
+            # Bard Spells
             print("     Level 1 Spells (pick 2)\nThunder Wave\nSleep\nSilent Image\nShield\nIdentify")	
             
             spell_1 = input("Enter your first spell: ")
+            if spell_1 not in self.bard_spells:
+                print("Invalid Entry or Spell Already Chosen")
+                self.bard_spells = ["thunder wave", "sleep", "silent image", "shield", "identify"]
+                self.bard_cantrips = ["mage hand", "minor illusion", "prestidigitation", "thaumaturgy", "vicious mockery"]
+                self.set_abilities()
+                return
+            self.bard_spells.remove(spell_1.lower())
             spell_2 = input("Enter your second spell: ")      
+            if spell_2 not in self.bard_spells:
+                print("Invalid Entry or Spell Already Chosen")
+                self.bard_spells = ["thunder wave", "sleep", "silent image", "shield", "identify"]
+                self.bard_cantrips = ["mage hand", "minor illusion", "prestidigitation", "thaumaturgy", "vicious mockery"]
+                self.set_abilities()
+                return
+            self.bard_spells.remove(spell_2.lower())
 
+            # Print setup for Bard Spells and Cantrips
             cantrips = {
             "Cantrip 1": cantrip_1, "Cantrip 2": cantrip_2
             }
-                
             spells = {
             "Spell 1": spell_1,"Spell 2": spell_2
             }
-        
+
         else:
             print("This Player Class does not aquire any abilities\n")
             spells = {""}
-            cantrips = {""}
-            
+            cantrips = {""}   
         self.cantrips = cantrips
         self.spells = spells
  
@@ -275,54 +364,83 @@ class Character:
         """
         Sets player equipment
         """
-
         print("\nSelect equipment for your character:")
         one_hand_full = False
         self.armor_class = 0
 
+        # Fighter Armor and Weapons
         if self.player_class == "Fighter":
             shield_choice = input("Would you like to use a shield? (Armor Class +2, but 2-handed weapons will not be available)? y/n: ")
             if shield_choice.lower() == "y":
                 self.armor_class += 2
                 self.equipment.append("Shield (AC+2)")
                 one_hand_full = True
+                print("\nSelect your armor from the following list:")
+                print("Plate        (Armor Class 18, Sneak Disadvantage)")
+                print("Half-Plate   (Armor Class 15)")
+                armor_choice = input()
+                if armor_choice.lower() == "plate":
+                    self.armor_class += 18
+                    self.equipment.append("Plate (AC 18, Sneak Disadvantage)")
+                    print("\nWith a shield you are given a shortsword.")
+                    self.equipment.append("Shortsword (1-handed, 1d6)")
+                elif armor_choice.lower() == "half-plate":
+                    self.armor_class += 15
+                    self.equipment.append("Half-Plate (AC 15)")
+                    print("\nWith a shield you are given a shortsword.")
+                    self.equipment.append("Shortsword (1-handed, 1d6)")
+                else:
+                    self.equipment = []
+                    self.set_equipment()
             elif shield_choice.lower() == "n":
                 one_hand_full = False
+                print("\nSelect your armor from the following list:")
+                print("Plate        (Armor Class 18, Sneak Disadvantage)")
+                print("Half-Plate   (Armor Class 15)")
+                armor_choice = input()
+                if armor_choice.lower() == "plate":
+                    self.armor_class += 18
+                    self.equipment.append("Plate (AC 18, Sneak Disadvantage)")
+                    print("\nChoose your weapon: ")
+                    print("Battleaxe        (2-handed, 1d8)")
+                    print("Heavy Crossbow   (2-handed, 1d10, range 150/600)")
+                    print("Shortsword       (1-handed, 1d6)")
+                    weapon_choice = input()
+                    if weapon_choice.lower() == "battleaxe":
+                        self.equipment.append("Battleaxe        (2-handed, 1d8)")
+                    elif weapon_choice.lower() == "heavy crossbow":
+                        self.equipment.append("Heavy Crossbow   (2-handed, 1d10, range 150/600)")
+                    elif weapon_choice.lower() == "shortsword":
+                        self.equipment.append("Shortsword (1-handed, 1d6)")
+                    else:
+                        self.equipment = []
+                        self.set_equipment()
+                elif armor_choice.lower() == "half-plate":
+                    self.armor_class += 15
+                    self.equipment.append("Half-Plate (AC 15)")
+                    print("\nChoose your weapon: ")
+                    print("Battleaxe        (2-handed, 1d8)")
+                    print("Heavy Crossbow   (2-handed, 1d10, range 150/600)")
+                    print("Shortsword       (1-handed, 1d6)")
+                    weapon_choice = input()
+                    if weapon_choice.lower() == "battleaxe":
+                        self.equipment.append("Battleaxe        (2-handed, 1d8)")
+                    elif weapon_choice.lower() == "heavy crossbow":
+                        self.equipment.append("Heavy Crossbow   (2-handed, 1d10, range 150/600)")
+                    elif weapon_choice.lower() == "shortsword":
+                        self.equipment.append("Shortsword (1-handed, 1d6)")
+                    else:
+                        self.equipment = []
+                        self.set_equipment()
+                else:
+                    self.equipment = []
+                    self.set_equipment()
             else:
-                self.set_equipment()
-            print("\nSelect your armor from the following list:")
-            print("Plate        (Armor Class 18, Sneak Disadvantage)")
-            print("Half-Plate   (Armor Class 15)")
-            armor_choice = input()
-            if armor_choice.lower() == "plate":
-                self.armor_class += 18
-                self.equipment.append("Plate (AC 18, Sneak Disadvantage)")
-            elif armor_choice.lower() == "half-plate":
-                self.armor_class += 15
-                self.equipment.append("Half-Plate (AC 15)")
-            else:
-                print("\nInvalid choice. Please choose equipment again.\n")
                 self.equipment = []
                 self.set_equipment()
-            print("\nNow select your weapon. ")
-            if one_hand_full == False:
-                print("Battleaxe        (2-handed, 1d8)")
-                print("Heavy Crossbow   (2-handed, 1d10, range 150/600)")
-            print("Shortsword       (1-handed, 1d6)")
-            weapon_choice = input()
-            if one_hand_full == False:
-                if weapon_choice.lower() == "battleaxe":
-                    self.equipment.append("Battleaxe (2-handed, 1d8)")
-                elif weapon_choice.lower() == "heavy crossbow":
-                    self.equipment.append("Heavy Crossbow (2-handed, 1d10, range 150/600)")
-            if weapon_choice.lower() == "shortsword":
-                self.equipment.append("Shortsword (1-handed, 1d6)")
-            else:
-                print("\nInvalid choice. Please select equipment again.\n")
-                self.equipment = []
-                self.set_equipment()
+                return
 
-
+        # Wizard Armor and Weapons
         elif self.player_class == "Wizard":
             print("\nPlease select your weapon from the following list:")
             print("Dagger       (1d4)")
@@ -338,8 +456,9 @@ class Character:
                 print("\nInvalid choice. Please select equipment again.\n")
                 self.equipment = []
                 self.set_equipment()
+                return
                 
-                
+        # Cleric Armor and Weapons        
         elif self.player_class == "Cleric":
             shield_choice = input("Would you like to use a shield? (Armor Class +2)? y/n")
             if shield_choice.lower() == "y":
@@ -352,15 +471,14 @@ class Character:
             if armor_choice.lower() == "scale-mail":
                 self.armor_class += 14
                 self.equipment.append("Scale-mail (AC 14)")
-                self.set_abilities()
             elif armor_choice.lower() == "breastplate":
                 self.armor_class += 14
                 self.equipment.append("Breastplate (AC 14)")
-                self.set_abilities()
             else:
                 print("\nInvalid choice. Please choose equipment again.\n")
                 self.equipment = []
                 self.set_equipment()
+                return
             print("\nNow select your weapon. ")
             print("Mace         (1-handed, 1d6)")
             print("Flail        (1-handed, 1d8")
@@ -376,8 +494,9 @@ class Character:
                 print("\nInvalid choice. Please select equipment again.\n")
                 self.equipment = []
                 self.set_equipment()
+                return
         
-        
+        # Bard Armor and Weapons
         elif self.player_class == "Bard":
             print("The bard uses Leather Armor (Armor Class 11).")
             self.armor_class += 11
@@ -396,8 +515,9 @@ class Character:
                 print("\nInvalid choice. Please select equipment again.\n")
                 self.equipment = []
                 self.set_equipment()
+                return
             
-
+        # Rogue Armor and Weapons
         elif self.player_class == "Rogue":
             print("\nSelect your armor from the following list:")
             print("Leather Armor    (Armor Class 11)")
@@ -413,6 +533,7 @@ class Character:
                 print("\nInvalid choice. Please choose equipment again.\n")
                 self.equipment = []
                 self.set_equipment()
+                return
             print("\nNow select your weapon. ")
             print("Dual-Wield Short Swords   (2d6)")
             print("Light Crossbow            (1d8, range 80/320)")
@@ -425,6 +546,7 @@ class Character:
                 print("\nInvalid choice. Please select equipment again.\n")
                 self.equipment = []
                 self.set_equipment()
+                return
            
     
     def get_race(self):
@@ -482,7 +604,6 @@ class Character:
         print("Armor Class: " + str(self.armor_class) + "\n")
         print("========================================")  
 
-
 def main():
     """
     Main method
@@ -497,7 +618,6 @@ def main():
             
     Character1.print_character_description()   
     print("Goodbye!")
-    
     
 if __name__ == "__main__":
     main()
