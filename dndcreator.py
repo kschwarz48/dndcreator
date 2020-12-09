@@ -14,6 +14,7 @@ class Character:
         self.weight = 0
         self.hair_color = ""
         self.eye_color = ""
+        self.gender = ""
         self.player_class = ""    
         self.health_points = 0
         self.equipment = [""]
@@ -64,6 +65,7 @@ class Character:
         Sets user-generated player name
         """
         self.player_name = input("\nPlease enter the player's name: ")
+        self.set_gender()
         self.set_race()
 
     def set_height_weight(self):
@@ -215,7 +217,7 @@ class Character:
                 self.set_abilities()
                 return
             self.wizard_cantrips.remove(cantrip_2.lower())
-            cantrip_3 = input("Enter your third cantrip selection: ")
+            cantrip_3 = input("Enter your third cantrip selection: \n")
             if cantrip_3 not in self.wizard_cantrips:
                 print("Invalid Entry")
                 self.wizard_cantrips = ["mage hand", "mage armor", "ray of frost", "fire bolt", "light"]
@@ -269,7 +271,7 @@ class Character:
                 self.set_abilities()
                 return
             self.cleric_cantrips.remove(cantrip_2.lower())
-            cantrip_3 = input("Enter your third cantrip selection: ")
+            cantrip_3 = input("Enter your third cantrip selection: \n")
             if cantrip_3.lower() not in self.cleric_cantrips:
                 print("Invalid Entry")
                 self.cleric_cantrips = ["mage hand", "mending", "acid splash", "guidance", "light"]
@@ -316,7 +318,7 @@ class Character:
                 self.set_abilities()
                 return
             self.bard_cantrips.remove(cantrip_1.lower())
-            cantrip_2 = input("Enter your second cantrip selection: ")
+            cantrip_2 = input("Enter your second cantrip selection: \n")
             if cantrip_2.lower() not in self.bard_cantrips:
                 print("Invalid Entry")
                 self.bard_cantrips = ["mage hand", "minor illusion", "prestidigitation", "thaumaturgy", "vicious mockery"]
@@ -370,7 +372,7 @@ class Character:
 
         # Fighter Armor and Weapons
         if self.player_class == "Fighter":
-            shield_choice = input("Would you like to use a shield? (Armor Class +2, but 2-handed weapons will not be available)? y/n: ")
+            shield_choice = input("Would you like to use a shield? (Armor Class +2, but 2-handed weapons will not be available)? (y/n): ")
             if shield_choice.lower() == "y":
                 self.armor_class += 2
                 self.equipment.append("Shield (AC+2)")
@@ -464,6 +466,13 @@ class Character:
             if shield_choice.lower() == "y":
                 self.armor_class += 2
                 self.equipment.append("Shield (AC+2)")
+            elif shield_choice.lower() == "n":
+                print("")
+            elif shield_choice.lower() is not "n" or "y":
+                print("\nInvalid choice. Please choose equipment again.\n")
+                self.equipment = []
+                self.set_equipment()
+                return
             print("\nSelect your armor from the following list:")
             print("Scale-mail    (Armor Class 14)")
             print("Breastplate   (Armor Class 14)")
@@ -549,6 +558,25 @@ class Character:
                 return
            
     
+    def get_gender(self):
+        """
+        Returns player race
+        """
+        return self.gender
+
+    def set_gender(self):
+        """
+        Receives input for character gender
+        Sets player gender
+        """
+        gender_input = input("\nChoose your gender (Male or Female): ")
+        if gender_input.lower() == "male" or gender_input.lower() == "female":
+            self.gender = gender_input.lower() 
+
+        else:
+            print("\nInvalid\n")
+            self.set_gender()
+
     def get_race(self):
         """
         Returns player race
@@ -576,6 +604,7 @@ class Character:
         print("==========Character Description==========")
         print("Player Name:     " + self.player_name.capitalize())
         print("Character Name:  " + self.character_name.capitalize())
+        print("Gender:          " + self.gender.capitalize())
         print("Race:            " + self.race.capitalize())
         print("Class:           " + self.player_class)
         print("Height:          " + str(self.height//12) +" feet " + str(self.height%12) + " inches")
@@ -602,7 +631,7 @@ class Character:
         for item in self.equipment:
             print(item)
         print("Armor Class: " + str(self.armor_class) + "\n")
-        print("========================================")  
+        print("=========================================")  
 
 def main():
     """
@@ -614,9 +643,7 @@ def main():
     print("This program will guide you through the character creation process to create a ready-to-play character.")
     
     Character1.set_character_name()  #FIRST METHOD CALL
-    Character1.print_character_description()
-            
-    Character1.print_character_description()   
+    Character1.print_character_description()  
     print("Goodbye!")
     
 if __name__ == "__main__":
